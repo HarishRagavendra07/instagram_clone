@@ -42,10 +42,11 @@ export default function Messages() {
 
   useEffect(() => {
     if (!socket) return;
-    const onMessage = ({ message, user: from }) => {
+    const onMessage = async ({ message, user: from }) => {
       if (from.username === username) {
         setThread((t) => t && { ...t, messages: [...t.messages, message] });
-        api(`/messages/${username}/read`, { method: 'POST' });
+        // Mark it read before refreshing, so the open chat doesn't show as unread
+        await api(`/messages/${username}/read`, { method: 'POST' }).catch(() => {});
       }
       loadConversations();
     };
