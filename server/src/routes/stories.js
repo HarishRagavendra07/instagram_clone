@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import Story from '../models/Story.js';
+import Story, { STORY_LIFETIME_MS } from '../models/Story.js';
 import User from '../models/User.js';
 import { requireAuth } from '../middleware/auth.js';
 import { upload, saveImage, imageUrl } from '../upload.js';
@@ -32,7 +32,10 @@ router.get('/', async (req, res) => {
 
 router.post('/', upload.single('image'), async (req, res) => {
   if (!req.file) return res.status(400).json({ error: 'An image is required' });
-  const story = await Story.create({ author: req.userId, image: await saveImage(req.file, req.userId) });
+  // The story and its image expire together, so the TTL indexes remove both
+  const expiresAt = new Date(Date.now() + STORY_LIFETIME_MS);
+  const image = await saveImage(req.file, req.userId, { expiresAt });
+  const story = await Story.create({ author: req.userId, image, expiresAt });
   const me = await User.findById(req.userId, 'followers');
   for (const id of [me._id, ...me.followers]) emitToUser(id, 'story:new', { id: story._id });
   res.status(201).json({ story: { id: story._id, image: imageUrl(story.image), createdAt: story.createdAt } });

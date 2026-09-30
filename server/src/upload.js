@@ -16,8 +16,8 @@ export const upload = multer({
   },
 });
 
-export async function saveImage(file, ownerId) {
-  const image = await Image.create({ data: file.buffer, contentType: file.mimetype, owner: ownerId });
+export async function saveImage(file, ownerId, { expiresAt } = {}) {
+  const image = await Image.create({ data: file.buffer, contentType: file.mimetype, owner: ownerId, expiresAt });
   return image._id;
 }
 
