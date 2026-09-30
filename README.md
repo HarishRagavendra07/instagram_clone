@@ -21,6 +21,12 @@ Optional: copy `server/.env.example` to `server/.env` to set `JWT_SECRET`, `PORT
 
 When deploying, set `NODE_ENV=production` and a long random `JWT_SECRET`. In production the server refuses to start without one, because a default secret would let anyone forge login tokens.
 
+### Tests
+
+```bash
+npm test --prefix server   # API integration tests against an in-memory MongoDB
+```
+
 ### Production build
 
 ```bash
