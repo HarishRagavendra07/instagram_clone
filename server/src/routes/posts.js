@@ -21,7 +21,11 @@ router.get('/feed', async (req, res) => {
     const me = await User.findById(req.userId, 'following');
     filter.author = { $in: [...me.following, me._id] };
   }
-  if (req.query.before) filter.createdAt = { $lt: new Date(req.query.before) };
+  if (req.query.before) {
+    const before = new Date(req.query.before);
+    if (Number.isNaN(before.getTime())) return res.status(400).json({ error: '`before` must be a valid date' });
+    filter.createdAt = { $lt: before };
+  }
   const posts = await Post.find(filter).sort({ createdAt: -1 }).limit(PAGE_SIZE).populate('author', AUTHOR_FIELDS);
   res.json({ posts: posts.map((p) => serializePost(p, req.userId)), hasMore: posts.length === PAGE_SIZE });
 });
