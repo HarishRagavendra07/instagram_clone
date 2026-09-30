@@ -38,3 +38,6 @@ export function timeAgo(date) {
   ];
   for (const [label, secs] of units) if (s >= secs) return `${Math.floor(s / secs)}${label}`;
 }
+
+// Must match ALLOWED_TYPES on the server
+export const IMAGE_ACCEPT = 'image/jpeg,image/png,image/gif,image/webp,image/avif';

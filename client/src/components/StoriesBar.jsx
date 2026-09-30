@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { api } from '../api';
+import { api, IMAGE_ACCEPT } from '../api';
 import { useAuth } from '../AuthContext';
 import Avatar from './Avatar';
 import StoryViewer from './StoryViewer';
@@ -62,7 +62,7 @@ export default function StoriesBar() {
           {uploading ? '…' : '+'}
         </button>
         <span className="story-name">Your story</span>
-        <input ref={fileRef} type="file" accept="image/*" hidden onChange={upload} />
+        <input ref={fileRef} type="file" accept={IMAGE_ACCEPT} hidden onChange={upload} />
       </div>
       {others.map((g) => (
         <button key={g.user.id} className="story-item story-btn" onClick={() => setViewing(groups.indexOf(g))}>

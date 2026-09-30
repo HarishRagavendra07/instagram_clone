@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { api } from '../api';
+import { api, IMAGE_ACCEPT } from '../api';
 
 export default function NewPost() {
   const navigate = useNavigate();
@@ -39,7 +39,7 @@ export default function NewPost() {
       <h2>Create new post</h2>
       <label className={`drop-zone ${preview ? 'has-image' : ''}`}>
         {preview ? <img src={preview} alt="Preview" /> : <span>Click to choose a photo</span>}
-        <input type="file" accept="image/*" hidden onChange={(e) => setFile(e.target.files[0] || null)} />
+        <input type="file" accept={IMAGE_ACCEPT} hidden onChange={(e) => setFile(e.target.files[0] || null)} />
       </label>
       <textarea
         placeholder="Write a caption…"

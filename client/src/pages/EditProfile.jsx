@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { api } from '../api';
+import { api, IMAGE_ACCEPT } from '../api';
 import { useAuth } from '../AuthContext';
 import Avatar from '../components/Avatar';
 
@@ -44,7 +44,7 @@ export default function EditProfile() {
       <label className="avatar-picker">
         <Avatar user={{ ...user, avatar: preview || user.avatar }} size={72} />
         <span className="link">Change profile photo</span>
-        <input type="file" accept="image/*" hidden onChange={(e) => setFile(e.target.files[0] || null)} />
+        <input type="file" accept={IMAGE_ACCEPT} hidden onChange={(e) => setFile(e.target.files[0] || null)} />
       </label>
       <label>
         Name

@@ -6,6 +6,7 @@ import express from 'express';
 import multer from 'multer';
 import { connectDb } from './db.js';
 import { initRealtime } from './realtime.js';
+import { UploadError } from './upload.js';
 import authRoutes from './routes/auth.js';
 import userRoutes from './routes/users.js';
 import postRoutes from './routes/posts.js';
@@ -35,7 +36,7 @@ if (fs.existsSync(clientDist)) {
 }
 
 app.use((err, req, res, next) => {
-  if (err instanceof multer.MulterError || err.message === 'Only image files are allowed') {
+  if (err instanceof multer.MulterError || err instanceof UploadError) {
     return res.status(400).json({ error: err.code === 'LIMIT_FILE_SIZE' ? 'Image must be 8 MB or smaller' : err.message });
   }
   console.error(err);
