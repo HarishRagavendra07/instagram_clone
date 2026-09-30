@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import User from '../models/User.js';
 import Post from '../models/Post.js';
+import Image from '../models/Image.js';
 import { requireAuth } from '../middleware/auth.js';
 import { upload, saveImage } from '../upload.js';
 import { userSummary } from '../serialize.js';
@@ -64,7 +65,10 @@ router.patch('/me', upload.single('avatar'), async (req, res) => {
   if (typeof req.body.name === 'string' && req.body.name.trim()) update.name = req.body.name.trim();
   if (typeof req.body.bio === 'string') update.bio = req.body.bio.slice(0, 150);
   if (req.file) update.avatar = await saveImage(req.file, req.userId);
-  const user = await User.findByIdAndUpdate(req.userId, update, { new: true });
+  const previous = await User.findByIdAndUpdate(req.userId, update); // returns the old document
+  // The old photo is no longer referenced anywhere, so remove it instead of leaking storage
+  if (req.file && previous.avatar) await Image.deleteOne({ _id: previous.avatar, owner: req.userId });
+  const user = await User.findById(req.userId);
   res.json({ user: { ...user.toPublic(), email: user.email, following: user.following } });
 });
 
