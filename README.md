@@ -19,6 +19,8 @@ The first start downloads a MongoDB binary (~100 MB), which takes a minute.
 
 Optional: copy `server/.env.example` to `server/.env` to set `JWT_SECRET`, `PORT`, or `MONGO_URI` (to use your own MongoDB / Atlas).
 
+When deploying, set `NODE_ENV=production` and a long random `JWT_SECRET`. In production the server refuses to start without one, because a default secret would let anyone forge login tokens.
+
 ### Production build
 
 ```bash
