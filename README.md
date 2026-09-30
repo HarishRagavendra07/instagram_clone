@@ -1,5 +1,7 @@
 # Instaclone
 
+[![CI](https://github.com/HarishRagavendra07/instagram_clone/actions/workflows/ci.yml/badge.svg)](https://github.com/HarishRagavendra07/instagram_clone/actions/workflows/ci.yml)
+
 A MERN-stack Instagram clone: register/login, photo posts stored in MongoDB, profiles, follows, a following + global feed that updates live over WebSockets, direct messages, and 24-hour stories.
 
 ## Stack
